@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import org.junit.Test;
 
@@ -62,12 +62,12 @@ public class PathTest {
             return property1;
         }
 
-        @Nonnull
+        @NotNull
         public String getProperty2() {
             return property2;
         }
 
-        @Nonnull
+        @NotNull
         public String getProperty3() {
             return property3;
         }
@@ -93,31 +93,17 @@ public class PathTest {
 
         // property (field)
         assertEquals(Field.class, property1.getClass());
-        assertTrue(property1.isAnnotationPresent(Nullable.class));
-        assertNotNull(property1.getAnnotation(Nullable.class));
-        assertFalse(property1.isAnnotationPresent(Nonnull.class));
-        assertNull(property1.getAnnotation(Nonnull.class));
 
         // property2 (method)
         assertEquals(Method.class, property2.getClass());
-        assertTrue(property2.isAnnotationPresent(Nonnull.class));
-        assertNotNull(property2.getAnnotation(Nonnull.class));
-        assertFalse(property2.isAnnotationPresent(Nullable.class));
-        assertNull(property2.getAnnotation(Nullable.class));
 
         // property3 (both)
         assertEquals(Annotations.class, property3.getClass());
         assertTrue(property3.isAnnotationPresent(QueryTransient.class));
         assertNotNull(property3.getAnnotation(QueryTransient.class));
-        assertTrue(property3.isAnnotationPresent(Nonnull.class));
-        assertNotNull(property3.getAnnotation(Nonnull.class));
-        assertFalse(property3.isAnnotationPresent(Nullable.class));
-        assertNull(property3.getAnnotation(Nullable.class));
 
         // property 4 (superclass)
         assertEquals(Method.class, property4.getClass());
-        assertTrue(property4.isAnnotationPresent(Nullable.class));
-        assertNotNull(property4.getAnnotation(Nullable.class));
 
     }
 

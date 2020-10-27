@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.querydsl.core.QueryException;
 
 /**
@@ -49,7 +48,7 @@ class JavaSE6SQLExceptionWrapper extends SQLExceptionWrapper {
     }
 
     private static Iterable<Throwable> getLinkedSQLExceptions(SQLException exception) {
-        ArrayList<Throwable> rv = Lists.newArrayList();
+        ArrayList<Throwable> rv = new ArrayList<>();
         SQLException nextException = exception.getNextException();
         while (nextException != null) {
             rv.add(nextException);

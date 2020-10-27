@@ -28,7 +28,6 @@ import javax.jdo.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Lists;
 import com.mysema.commons.lang.CloseableIterator;
 import com.mysema.commons.lang.IteratorAdapter;
 import com.querydsl.core.*;
@@ -167,7 +166,7 @@ public abstract class AbstractSQLQuery<T, Q extends AbstractSQLQuery<T, Q>> exte
         if (projection != null && !forCount) {
             if (rv instanceof List) {
                 List<?> original = (List<?>) rv;
-                rv = Lists.newArrayList();
+                rv = new ArrayList<>();
                 for (Object o : original) {
                     ((List) rv).add(project(projection, o));
                 }

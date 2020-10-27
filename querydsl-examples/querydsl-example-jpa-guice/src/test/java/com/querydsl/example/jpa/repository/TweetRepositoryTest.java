@@ -57,8 +57,8 @@ public class TweetRepositoryTest extends AbstractPersistenceTest {
 
     @Test
     public void find_list_by_complex_predicate() {
-        List<String> usernames = Lists.newArrayList("dr_frank", "mike", "maggie", "liza");
-        List<User> users = Lists.newArrayList();
+        List<String> usernames = new ArrayList<>("dr_frank", "mike", "maggie", "liza");
+        List<User> users = new ArrayList<>();
         for (String username : usernames) {
             users.add(userRepository.save(new User(username)));
         }
@@ -78,8 +78,8 @@ public class TweetRepositoryTest extends AbstractPersistenceTest {
 
     @Test
     public void find_list_by_complex_predicate_hibernate() {
-        List<String> usernames = Lists.newArrayList("dr_frank", "mike", "maggie", "liza");
-        List<User> users = Lists.newArrayList();
+        List<String> usernames = new ArrayList<>("dr_frank", "mike", "maggie", "liza");
+        List<User> users = new ArrayList<>();
         for (String username : usernames) {
             users.add(userRepository.save(new User(username)));
         }

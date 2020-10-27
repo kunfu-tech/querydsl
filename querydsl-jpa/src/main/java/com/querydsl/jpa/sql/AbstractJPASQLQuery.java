@@ -14,6 +14,7 @@
 package com.querydsl.jpa.sql;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -33,7 +34,6 @@ import org.slf4j.MDC;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
 import com.mysema.commons.lang.CloseableIterator;
 import com.querydsl.core.*;
 import com.querydsl.core.types.Expression;
@@ -115,7 +115,7 @@ public abstract class AbstractJPASQLQuery<T, Q extends AbstractJPASQLQuery<T, Q>
         }
         if (!forCount) {
             ListMultimap<Expression<?>, String> aliases = serializer.getAliases();
-            Set<String> used = Sets.newHashSet();
+            Set<String> used = new HashSet<>();
             if (projection instanceof FactoryExpression) {
                 for (Expression<?> expr : ((FactoryExpression<?>) projection).getArgs()) {
                     if (isEntityExpression(expr)) {

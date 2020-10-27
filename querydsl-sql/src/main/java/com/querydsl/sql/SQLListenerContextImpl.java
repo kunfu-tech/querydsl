@@ -18,6 +18,7 @@ import java.sql.PreparedStatement;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -104,12 +105,7 @@ public class SQLListenerContextImpl implements SQLListenerContext {
 
     @Override
     public Collection<String> getSQLStatements() {
-        return Lists.transform(sqlStatements, new Function<SQLBindings, String>() {
-            @Override
-            public String apply(SQLBindings sqlBindings) {
-                return sqlBindings.getSQL();
-            }
-        });
+        return sqlStatements.stream().map(SQLBindings::getSQL).collect(Collectors.toList());
     }
 
     @Override

@@ -495,7 +495,7 @@ public class InsertBase extends AbstractBaseTest {
         QUuids uuids = QUuids.uuids;
         UUID uuid = UUID.randomUUID();
         insert(uuids).set(uuids.field, uuid).execute();
-        assertEquals(uuid, query().from(uuids).select(uuids.field).fetchFirst());
+        assertEquals(uuid, query().from(uuids).select(uuids.field).fetchFirst().orElse(null));
     }
 
     @Test
@@ -505,7 +505,7 @@ public class InsertBase extends AbstractBaseTest {
         QXmlTest xmlTest = QXmlTest.xmlTest;
         String contents = "<html><head>a</head><body>b</body></html>";
         insert(xmlTest).set(xmlTest.col, contents).execute();
-        assertEquals(contents, query().from(xmlTest).select(xmlTest.col).fetchFirst());
+        assertEquals(contents, query().from(xmlTest).select(xmlTest.col).fetchFirst().orElse(null));
     }
 
 }

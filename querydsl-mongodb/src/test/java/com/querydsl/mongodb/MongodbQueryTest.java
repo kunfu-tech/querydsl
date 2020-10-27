@@ -213,7 +213,7 @@ public class MongodbQueryTest {
 
     @Test
     public void find_by_id() {
-        assertNotNull(where(user.id.eq(u1.getId())).fetchFirst() != null);
+        assertNotNull(where(user.id.eq(u1.getId())).fetchFirst().orElse(null));
     }
 
     @Test
@@ -260,7 +260,7 @@ public class MongodbQueryTest {
         ds.save(d);
         Date end = new Date(current + 2 * dayInMillis);
 
-        assertEquals(d, query(dates).where(dates.date.between(start, end)).fetchFirst());
+        assertEquals(d, query(dates).where(dates.date.between(start, end)).fetchFirst().orElse(null));
         assertEquals(0, query(dates).where(dates.date.between(new Date(0), start)).fetchCount());
     }
 

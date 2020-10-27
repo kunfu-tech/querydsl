@@ -61,7 +61,7 @@ public abstract class FetchableQueryBase<T, Q extends FetchableQueryBase<T, Q>>
                 if (it.hasNext()) {
                     throw new NonUniqueResultException();
                 }
-                return Optional.of(rv);
+                return Optional.ofNullable(rv);
             } else {
                 return Optional.empty();
             }

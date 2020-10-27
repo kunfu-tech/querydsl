@@ -30,7 +30,7 @@ public class DummyFetchable<T> implements Fetchable<T> {
 
     @Override
     public Optional<T> fetchFirst() {
-        return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
+        return results.isEmpty() ? Optional.empty() : Optional.ofNullable(results.get(0));
     }
 
     @Override

@@ -466,7 +466,7 @@ public class LuceneQueryTest {
 
     @Test
     public void singleResult() {
-        assertNotNull(query.where(title.ne("")).fetchFirst());
+        assertNotNull(query.where(title.ne("")).fetchFirst().orElse(null));
     }
 
     @Test
@@ -487,7 +487,7 @@ public class LuceneQueryTest {
     @Test
     public void single_result_returns_null_if_nothing_is_in_range() {
         query.where(title.startsWith("Nummi"));
-        assertNull(query.offset(10).fetchFirst());
+        assertNull(query.offset(10).fetchFirst().orElse(null));
     }
 
     @Test

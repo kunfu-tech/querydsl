@@ -201,13 +201,6 @@ public class SelectBase extends AbstractBaseTest {
     }
 
     @Test
-    @ExcludeIn({DERBY, HSQLDB})
-    public void array_null() {
-        Expression<Integer[]> expr = Expressions.template(Integer[].class, "null");
-        assertNull(firstResult(expr));
-    }
-
-    @Test
     public void array_projection() {
         List<String[]> results = query().from(employee).select(
                 new ArrayConstructorExpression<String>(String[].class, employee.firstname)).fetch();
@@ -703,10 +696,10 @@ public class SelectBase extends AbstractBaseTest {
     @Test
     public void dateTime() {
         SQLQuery<?> query = query().from(employee).orderBy(employee.id.asc());
-        assertEquals(Integer.valueOf(10),     query.select(employee.datefield.dayOfMonth()).fetchFirst());
-        assertEquals(Integer.valueOf(2),      query.select(employee.datefield.month()).fetchFirst());
-        assertEquals(Integer.valueOf(2000),   query.select(employee.datefield.year()).fetchFirst());
-        assertEquals(Integer.valueOf(200002), query.select(employee.datefield.yearMonth()).fetchFirst());
+        assertEquals(Integer.valueOf(10),     query.select(employee.datefield.dayOfMonth()).fetchFirst().orElse(null));
+        assertEquals(Integer.valueOf(2),      query.select(employee.datefield.month()).fetchFirst().orElse(null));
+        assertEquals(Integer.valueOf(2000),   query.select(employee.datefield.year()).fetchFirst().orElse(null));
+        assertEquals(Integer.valueOf(200002), query.select(employee.datefield.yearMonth()).fetchFirst().orElse(null));
     }
 
     @Test
@@ -750,7 +743,7 @@ public class SelectBase extends AbstractBaseTest {
     @Test
     public void factoryExpression_in_groupBy() {
         Expression<Employee> empBean = Projections.bean(Employee.class, employee.id, employee.superiorId);
-        assertTrue(query().from(employee).groupBy(empBean).select(empBean).fetchFirst() != null);
+        assertTrue(query().from(employee).groupBy(empBean).select(empBean).fetchFirst().isPresent());
     }
 
     @Test
@@ -1341,7 +1334,7 @@ public class SelectBase extends AbstractBaseTest {
         assertEquals("Mike", query()
                 .from(employee).where(employee.firstname.eq(name))
                 .set(name, "Mike")
-                .select(employee.firstname).fetchFirst());
+                .select(employee.firstname).fetchFirst().orElse(null));
     }
 
     @Test
@@ -1350,7 +1343,7 @@ public class SelectBase extends AbstractBaseTest {
         assertEquals("Mike", query()
                 .from(employee).where(employee.firstname.eq(name))
                 .set(name, "Mike")
-                .select(employee.firstname).fetchFirst());
+                .select(employee.firstname).fetchFirst().orElse(null));
     }
 
     @Test(expected = ParamNotSetException.class)
@@ -1358,7 +1351,7 @@ public class SelectBase extends AbstractBaseTest {
         Param<String> name = new Param<String>(String.class,"name");
         assertEquals("Mike", query()
                 .from(employee).where(employee.firstname.eq(name))
-                .select(employee.firstname).fetchFirst());
+                .select(employee.firstname).fetchFirst().orElse(null));
     }
 
     @Test
@@ -1644,12 +1637,12 @@ public class SelectBase extends AbstractBaseTest {
 
     @Test
     public void single() {
-        assertNotNull(query().from(survey).select(survey.name).fetchFirst());
+        assertNotNull(query().from(survey).select(survey.name).fetchFirst().orElse(null));
     }
 
     @Test
     public void single_array() {
-        assertNotNull(query().from(survey).select(new Expression<?>[]{survey.name}).fetchFirst());
+        assertNotNull(query().from(survey).select(new Expression<?>[]{survey.name}).fetchFirst().orElse(null));
     }
 
     @Test
@@ -1762,28 +1755,28 @@ public class SelectBase extends AbstractBaseTest {
     @ExcludeIn(SQLITE)
     public void string_left() {
         assertEquals("John", query().from(employee).where(employee.lastname.eq("Johnson"))
-                                    .select(SQLExpressions.left(employee.lastname, 4)).fetchFirst());
+                                    .select(SQLExpressions.left(employee.lastname, 4)).fetchFirst().orElse(null));
     }
 
     @Test
     @ExcludeIn({DERBY, SQLITE})
     public void string_right() {
         assertEquals("son", query().from(employee).where(employee.lastname.eq("Johnson"))
-                                   .select(SQLExpressions.right(employee.lastname, 3)).fetchFirst());
+                                   .select(SQLExpressions.right(employee.lastname, 3)).fetchFirst().orElse(null));
     }
 
     @Test
     @ExcludeIn({DERBY, SQLITE})
     public void string_left_Right() {
         assertEquals("hn", query().from(employee).where(employee.lastname.eq("Johnson"))
-                                  .select(SQLExpressions.right(SQLExpressions.left(employee.lastname, 4), 2)).fetchFirst());
+                                  .select(SQLExpressions.right(SQLExpressions.left(employee.lastname, 4), 2)).fetchFirst().orElse(null));
     }
 
     @Test
     @ExcludeIn({DERBY, SQLITE})
     public void string_right_Left() {
         assertEquals("ns", query().from(employee).where(employee.lastname.eq("Johnson"))
-                                  .select(SQLExpressions.left(SQLExpressions.right(employee.lastname, 4), 2)).fetchFirst());
+                                  .select(SQLExpressions.left(SQLExpressions.right(employee.lastname, 4), 2)).fetchFirst().orElse(null));
     }
 
     @Test
@@ -2079,14 +2072,14 @@ public class SelectBase extends AbstractBaseTest {
     @ExcludeIn({DB2, DERBY, H2})
     public void yearWeek() {
         SQLQuery<?> query = query().from(employee).orderBy(employee.id.asc());
-        assertEquals(Integer.valueOf(200006), query.select(employee.datefield.yearWeek()).fetchFirst());
+        assertEquals(Integer.valueOf(200006), query.select(employee.datefield.yearWeek()).fetchFirst().orElse(null));
     }
 
     @Test
     @IncludeIn({H2})
     public void yearWeek_h2() {
         SQLQuery<?> query = query().from(employee).orderBy(employee.id.asc());
-        assertEquals(Integer.valueOf(200007), query.select(employee.datefield.yearWeek()).fetchFirst());
+        assertEquals(Integer.valueOf(200007), query.select(employee.datefield.yearWeek()).fetchFirst().orElse(null));
     }
 
     @Test

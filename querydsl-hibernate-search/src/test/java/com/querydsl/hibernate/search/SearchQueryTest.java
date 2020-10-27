@@ -90,7 +90,7 @@ public class SearchQueryTest extends AbstractQueryTest {
 
     @Test
     public void singleResult() {
-        assertNotNull(query().where(user.middleName.eq("X")).fetchFirst());
+        assertNotNull(query().where(user.middleName.eq("X")).fetchFirst().orElse(null));
     }
 
     @Test

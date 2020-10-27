@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.base.Function;
 import com.querydsl.core.QueryMetadata;
 
 /**

@@ -65,7 +65,7 @@ public class JDOSQLQueryTest extends AbstractJDOTest {
     @Test
     public void singleResult_with_array() {
         assertEquals("A0", sql().from(product).orderBy(product.name.asc())
-                .select(new Expression<?>[]{product.name}).fetchFirst().get(product.name));
+                .select(new Expression<?>[]{product.name}).fetchFirst().get().get(product.name));
     }
 
     @Test

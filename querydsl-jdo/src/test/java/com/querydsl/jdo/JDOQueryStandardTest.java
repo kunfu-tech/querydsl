@@ -108,8 +108,8 @@ public class JDOQueryStandardTest extends AbstractJDOTest {
 
     @Test
     public void standardTest() {
-        Product p = query().from(product).where(product.name.eq(productName)).limit(1).select(product).fetchOne();
-        Product p2 = query().from(product).where(product.name.startsWith(otherName)).limit(1).select(product).fetchOne();
+        Product p = query().from(product).where(product.name.eq(productName)).limit(1).select(product).fetchOne().get();
+        Product p2 = query().from(product).where(product.name.startsWith(otherName)).limit(1).select(product).fetchOne().get();
         standardTest.noProjections();
         standardTest.noCounts();
 

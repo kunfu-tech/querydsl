@@ -63,11 +63,11 @@ public class SelectBase extends AbstractBaseTest {
     };
 
     private <T> T firstResult(Expression<T> expr) {
-        return query().select(expr).fetchFirst();
+        return query().select(expr).fetchFirst().get();
     }
 
     private Tuple firstResult(Expression<?>... exprs) {
-        return query().select(exprs).fetchFirst();
+        return query().select(exprs).fetchFirst().get();
     }
 
     @Test
@@ -83,9 +83,9 @@ public class SelectBase extends AbstractBaseTest {
     public void aggregate_uniqueResult() {
         int min = 30000, avg = 65000, max = 160000;
         // fetchOne
-        assertEquals(min, query().from(employee).select(employee.salary.min()).fetchOne().intValue());
-        assertEquals(avg, query().from(employee).select(employee.salary.avg()).fetchOne().intValue());
-        assertEquals(max, query().from(employee).select(employee.salary.max()).fetchOne().intValue());
+        assertEquals(min, query().from(employee).select(employee.salary.min()).fetchOne().get().intValue());
+        assertEquals(avg, query().from(employee).select(employee.salary.avg()).fetchOne().get().intValue());
+        assertEquals(max, query().from(employee).select(employee.salary.max()).fetchOne().get().intValue());
     }
 
     @Test
@@ -238,13 +238,13 @@ public class SelectBase extends AbstractBaseTest {
     @Test
     @ExcludeIn({ORACLE, CUBRID, FIREBIRD, DB2, DERBY, SQLSERVER, SQLITE, TERADATA})
     public void boolean_all() {
-        assertTrue(query().from(employee).select(SQLExpressions.all(employee.firstname.isNotNull())).fetchOne());
+        assertTrue(query().from(employee).select(SQLExpressions.all(employee.firstname.isNotNull())).fetchOne().get());
     }
 
     @Test
     @ExcludeIn({ORACLE, CUBRID, FIREBIRD, DB2, DERBY, SQLSERVER, SQLITE, TERADATA})
     public void boolean_any() {
-        assertTrue(query().from(employee).select(SQLExpressions.any(employee.firstname.isNotNull())).fetchOne());
+        assertTrue(query().from(employee).select(SQLExpressions.any(employee.firstname.isNotNull())).fetchOne().get());
     }
 
     @Test
@@ -366,7 +366,7 @@ public class SelectBase extends AbstractBaseTest {
 
     @Test
     public void count2() {
-        assertEquals(10, query().from(employee).select(employee.count()).fetchFirst().intValue());
+        assertEquals(10, query().from(employee).select(employee.count()).fetchFirst().get().intValue());
     }
 
     @Test
@@ -375,7 +375,7 @@ public class SelectBase extends AbstractBaseTest {
     public void count_all() {
         expectedQuery = "select count(*) as rc from EMPLOYEE e";
         NumberPath<Long> rowCount = Expressions.numberPath(Long.class, "rc");
-        assertEquals(10, query().from(employee).select(Wildcard.count.as(rowCount)).fetchOne().intValue());
+        assertEquals(10, query().from(employee).select(Wildcard.count.as(rowCount)).fetchOne().get().intValue());
     }
 
     @Test
@@ -384,7 +384,7 @@ public class SelectBase extends AbstractBaseTest {
     public void count_all_Oracle() {
         expectedQuery = "select count(*) rc from EMPLOYEE e";
         NumberPath<Long> rowCount = Expressions.numberPath(Long.class, "rc");
-        assertEquals(10, query().from(employee).select(Wildcard.count.as(rowCount)).fetchOne().intValue());
+        assertEquals(10, query().from(employee).select(Wildcard.count.as(rowCount)).fetchOne().get().intValue());
     }
 
     @Test
@@ -517,10 +517,10 @@ public class SelectBase extends AbstractBaseTest {
     @ExcludeIn({SQLITE})
     public void date_add() {
         SQLQuery<?> query = query().from(employee);
-        Date date1 = query.select(employee.datefield).fetchFirst();
-        Date date2 = query.select(SQLExpressions.addYears(employee.datefield, 1)).fetchFirst();
-        Date date3 = query.select(SQLExpressions.addMonths(employee.datefield, 1)).fetchFirst();
-        Date date4 = query.select(SQLExpressions.addDays(employee.datefield, 1)).fetchFirst();
+        Date date1 = query.select(employee.datefield).fetchFirst().get();
+        Date date2 = query.select(SQLExpressions.addYears(employee.datefield, 1)).fetchFirst().get();
+        Date date3 = query.select(SQLExpressions.addMonths(employee.datefield, 1)).fetchFirst().get();
+        Date date4 = query.select(SQLExpressions.addDays(employee.datefield, 1)).fetchFirst().get();
 
         assertTrue(date2.getTime() > date1.getTime());
         assertTrue(date3.getTime() > date1.getTime());
@@ -566,9 +566,9 @@ public class SelectBase extends AbstractBaseTest {
         Date date = new Date(localDate.toDateMidnight().getMillis());
 
         for (DatePart dp : dps) {
-            int diff1 = query.select(SQLExpressions.datediff(dp, date, employee.datefield)).fetchFirst();
-            int diff2 = query.select(SQLExpressions.datediff(dp, employee.datefield, date)).fetchFirst();
-            int diff3 = query2.select(SQLExpressions.datediff(dp, employee.datefield, employee2.datefield)).fetchFirst();
+            int diff1 = query.select(SQLExpressions.datediff(dp, date, employee.datefield)).fetchFirst().get();
+            int diff2 = query.select(SQLExpressions.datediff(dp, employee.datefield, date)).fetchFirst().get();
+            int diff3 = query2.select(SQLExpressions.datediff(dp, employee.datefield, employee2.datefield)).fetchFirst().get();
             assertEquals(diff1, -diff2);
         }
 
@@ -588,13 +588,13 @@ public class SelectBase extends AbstractBaseTest {
         LocalDate localDate = new LocalDate(1970, 1, 10);
         Date date = new Date(localDate.toDateMidnight().getMillis());
 
-        int years = query.select(SQLExpressions.datediff(DatePart.year, date, employee.datefield)).fetchFirst();
-        int months = query.select(SQLExpressions.datediff(DatePart.month, date, employee.datefield)).fetchFirst();
+        int years = query.select(SQLExpressions.datediff(DatePart.year, date, employee.datefield)).fetchFirst().get();
+        int months = query.select(SQLExpressions.datediff(DatePart.month, date, employee.datefield)).fetchFirst().get();
         // weeks
-        int days = query.select(SQLExpressions.datediff(DatePart.day, date, employee.datefield)).fetchFirst();
-        int hours = query.select(SQLExpressions.datediff(DatePart.hour, date, employee.datefield)).fetchFirst();
-        int minutes = query.select(SQLExpressions.datediff(DatePart.minute, date, employee.datefield)).fetchFirst();
-        int seconds = query.select(SQLExpressions.datediff(DatePart.second, date, employee.datefield)).fetchFirst();
+        int days = query.select(SQLExpressions.datediff(DatePart.day, date, employee.datefield)).fetchFirst().get();
+        int hours = query.select(SQLExpressions.datediff(DatePart.hour, date, employee.datefield)).fetchFirst().get();
+        int minutes = query.select(SQLExpressions.datediff(DatePart.minute, date, employee.datefield)).fetchFirst().get();
+        int seconds = query.select(SQLExpressions.datediff(DatePart.second, date, employee.datefield)).fetchFirst().get();
 
         assertEquals(949363200, seconds);
         assertEquals(15822720,  minutes);
@@ -1225,7 +1225,7 @@ public class SelectBase extends AbstractBaseTest {
         NumberTemplate<Double> four = Expressions.numberTemplate(Double.class, "4.0");
         NumberTemplate<Double> five = Expressions.numberTemplate(Double.class, "5.0");
         NumberTemplate<Double> six = Expressions.numberTemplate(Double.class, "6.0");
-        Double num = query().select(one.add(two.multiply(three)).subtract(four.divide(five)).add(six.mod(three))).fetchFirst();
+        Double num = query().select(one.add(two.multiply(three)).subtract(four.divide(five)).add(six.mod(three))).fetchFirst().get();
         assertEquals(6.2, num, 0.001);
     }
 
@@ -1281,7 +1281,7 @@ public class SelectBase extends AbstractBaseTest {
         long result = query()
                 .select(employee.datefield.year().mod(1))
                 .from(employee)
-                .fetchFirst();
+                .fetchFirst().get();
         assertEquals(0, result);
     }
 
@@ -1574,8 +1574,8 @@ public class SelectBase extends AbstractBaseTest {
 
     @Test
     public void select_booleanExpr3() {
-        assertTrue(query().select(Expressions.TRUE).fetchFirst());
-        assertFalse(query().select(Expressions.FALSE).fetchFirst());
+        assertTrue(query().select(Expressions.TRUE).fetchFirst().get());
+        assertFalse(query().select(Expressions.FALSE).fetchFirst().get());
     }
 
     @Test
@@ -1877,7 +1877,7 @@ public class SelectBase extends AbstractBaseTest {
 
     @Test
     public void unique_Constructor_projection() {
-        IdName idAndName = query().from(survey).limit(1).select(new QIdName(survey.id, survey.name)).fetchFirst();
+        IdName idAndName = query().from(survey).limit(1).select(new QIdName(survey.id, survey.name)).fetchFirst().get();
         assertNotNull(idAndName);
         assertNotNull(idAndName.getId());
         assertNotNull(idAndName.getName());
@@ -1885,14 +1885,14 @@ public class SelectBase extends AbstractBaseTest {
 
     @Test
     public void unique_single() {
-        String s = query().from(survey).limit(1).select(survey.name).fetchFirst();
+        String s = query().from(survey).limit(1).select(survey.name).fetchFirst().get();
         assertNotNull(s);
     }
 
     @Test
     public void unique_wildcard() {
         // unique wildcard
-        Tuple row = query().from(survey).limit(1).select(survey.all()).fetchFirst();
+        Tuple row = query().from(survey).limit(1).select(survey.all()).fetchFirst().get();
         assertNotNull(row);
         assertEquals(3, row.size());
         assertNotNull(row.get(0, Object.class));

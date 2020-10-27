@@ -80,7 +80,7 @@ public class InsertBase extends AbstractBaseTest {
                 dateTest.dateTest.year(),
                 dateTest.dateTest.month(),
                 dateTest.dateTest.dayOfMonth(),
-                dateTimeProperty).fetchFirst();
+                dateTimeProperty).fetchFirst().get();
         assertEquals(Integer.valueOf(1978), result.get(0, Integer.class));
         assertEquals(Integer.valueOf(1), result.get(1, Integer.class));
         assertEquals(Integer.valueOf(2), result.get(2, Integer.class));
@@ -363,7 +363,7 @@ public class InsertBase extends AbstractBaseTest {
         assertEquals(1, insert(survey).set(survey.name,
             query().where(query().from(survey2)
                            .where(survey2.name.eq("MyModule")).notExists())
-                .select(Expressions.constant("MyModule")).fetchFirst())
+                .select(Expressions.constant("MyModule")).fetchFirst().get())
             .execute());
 
         assertEquals(1L , query().from(survey).where(survey.name.eq("MyModule")).fetchCount());
